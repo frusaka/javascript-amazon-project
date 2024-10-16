@@ -24,7 +24,7 @@ products.forEach((product) => {
       </div>
 
       <div class="product-quantity-container">
-        <select>
+        <select class="js-quantity-selector-${product.id}">
           <option selected value="1">1</option>
           <option value="2">2</option>
           <option value="3">3</option>
@@ -40,19 +40,22 @@ products.forEach((product) => {
 
       <div class="product-spacer"></div>
 
-      <div class="added-to-cart">
+      <div class="added-to-cart js-added-to-cart-${product.id}">
         <img src="images/icons/checkmark.png">
         Added
       </div>
 
-      <button class="add-to-cart-button button-primary js-add-to-cart-button" data-product-id=${
-        product.id
-      }>
+      <button class="add-to-cart-button button-primary js-add-to-cart-button"
+        data-product-id=${product.id}>
         Add to Cart
       </button>
     </div>
   `;
 });
+
+function selecterQuantity(productId) {
+  return +document.querySelector(`.js-quantity-selector-${productId}`).value;
+}
 
 document.querySelector(".js-proudcts-grid").innerHTML = productsHTML;
 document.querySelectorAll(".js-add-to-cart-button").forEach((jsButton) => {
@@ -62,16 +65,15 @@ document.querySelectorAll(".js-add-to-cart-button").forEach((jsButton) => {
     cart.forEach((product) => {
       if (product.id == jsButton.dataset.productId) {
         productInCart = true;
-        product.quantity++;
+        product.quantity += selecterQuantity(product.id);
       }
       totalQuantity += product.quantity;
     });
+    const id = jsButton.dataset.productId;
     if (!productInCart) {
-      cart.push({
-        id: jsButton.dataset.productId,
-        quantity: 1,
-      });
-      totalQuantity += 1;
+      const quantity = selecterQuantity(id);
+      totalQuantity += quantity;
+      cart.push({ id, quantity });
     }
     document.querySelector(".js-cart-quantity").innerHTML = totalQuantity;
   });
