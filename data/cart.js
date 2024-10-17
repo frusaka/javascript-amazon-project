@@ -1,6 +1,4 @@
-export const cart = JSON.parse(localStorage.getItem("amazon-cart")) || [
-  { total: 0 },
-];
+export const cart = JSON.parse(localStorage.getItem("amazon-cart")) || [];
 
 export function addToCart(productId) {
   let productInCart;
@@ -15,19 +13,23 @@ export function addToCart(productId) {
   if (!productInCart) {
     cart.push({ productId, quantity });
   }
-  cart[0].total += quantity;
   saveCart();
 }
 
 export function removeFromCart(productId) {
-  for (let index = 1; index < cart.length; index++) {
+  for (let index = 0; index < cart.length; index++) {
     if (productId == cart[index].productId) {
-      cart[0].total -= cart[index].quantity;
       cart.splice(index, 1);
-      break;
+      saveCart();
+      return;
     }
   }
-  saveCart();
+}
+
+export function calculateCartQuantity() {
+  let total = 0;
+  cart.forEach((cartItem) => (total += cartItem.quantity));
+  return total;
 }
 
 function saveCart() {
