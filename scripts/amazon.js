@@ -1,4 +1,4 @@
-import { cart } from "../data/cart.js";
+import { cart, addToCart } from "../data/cart.js";
 import { products } from "../data/products.js";
 
 let productsHTML = "";
@@ -57,44 +57,26 @@ products.forEach((product) => {
   `;
 });
 
-function selecterQuantity(productId) {
-  return +document.querySelector(`.js-quantity-selector-${productId}`).value;
+function showAddedLabel(productId, previousTimeOut) {
+  const inCartElement = document.querySelector(
+    `.js-added-to-cart-${productId}`
+  );
+  clearTimeout(previousTimeOut.value);
+  inCartElement.classList.add("js-added-to-cart");
+  previousTimeOut.value = setTimeout(
+    () => inCartElement.classList.remove("js-added-to-cart"),
+    2000
+  );
 }
 
 document.querySelector(".js-proudcts-grid").innerHTML = productsHTML;
+
 document.querySelectorAll(".js-add-to-cart-button").forEach((jsButton) => {
+  let previousTimeOut = { value: null };
+  const productId = jsButton.dataset.productId;
   jsButton.addEventListener("click", () => {
-    const productId = jsButton.dataset.productId;
-    const inCartElement = document.querySelector(
-      `.js-added-to-cart-${productId}`
-    );
-    let productInCart;
-    let previousTimeOut;
-    let totalQuantity = 0;
-
-    cart.forEach((product) => {
-      if (product.id == productId) {
-        productInCart = true;
-        product.quantity += selecterQuantity(productId);
-      }
-      totalQuantity += product.quantity;
-    });
-    if (!productInCart) {
-      const quantity = selecterQuantity(productId);
-      totalQuantity += quantity;
-      cart.push({ productId, quantity });
-    }
-
-    inCartElement.classList.add("js-added-to-cart");
-    if (previousTimeOut) {
-      clearTimeout(previousTimeOut);
-      previousTimeOut = undefined;
-    }
-    previousTimeOut = setTimeout(
-      () => inCartElement.classList.remove("js-added-to-cart"),
-      2000
-    );
-
-    document.querySelector(".js-cart-quantity").innerHTML = totalQuantity;
+    addToCart(productId);
+    showAddedLabel(productId, previousTimeOut);
+    document.querySelector(".js-cart-quantity").innerHTML = cart[0].total;
   });
 });
