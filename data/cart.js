@@ -1,36 +1,35 @@
-export const cart = [
+export const cart = JSON.parse(localStorage.getItem("amazon-cart")) || [
   { total: 0 },
-  {
-    id: "e43638ce-6aa0-4b85-b27f-e1d07eb678c6",
-    quantity: 2,
-  },
-  {
-    id: "15b6fc6f-327a-4ec4-896f-486349e85a3d",
-    quantity: 1,
-  },
 ];
 
 export function addToCart(productId) {
   let productInCart;
   const quantity = +document.querySelector(`.js-quantity-selector-${productId}`)
     .value;
-  cart.forEach((product) => {
-    if (product.id == productId) {
+  cart.forEach((cartItem) => {
+    if (cartItem.productId == productId) {
       productInCart = true;
-      product.quantity += quantity;
+      cartItem.quantity += quantity;
     }
   });
   if (!productInCart) {
     cart.push({ productId, quantity });
   }
   cart[0].total += quantity;
+  saveCart();
 }
 
 export function removeFromCart(productId) {
   for (let index = 1; index < cart.length; index++) {
-    if (productId == cart[index].id) {
+    if (productId == cart[index].productId) {
+      cart[0].total -= cart[index].quantity;
       cart.splice(index, 1);
       break;
     }
   }
+  saveCart();
+}
+
+function saveCart() {
+  localStorage.setItem("amazon-cart", JSON.stringify(cart));
 }

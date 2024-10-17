@@ -7,7 +7,7 @@ let cartSummaryHTML = "";
 cart.slice(1).forEach((cartItem) => {
   let matchingProduct;
   for (let product of products) {
-    if (product.id == cartItem.id) {
+    if (product.id == cartItem.productId) {
       matchingProduct = product;
       break;
     }
