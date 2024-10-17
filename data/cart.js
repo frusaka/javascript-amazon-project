@@ -25,3 +25,12 @@ export function addToCart(productId) {
   }
   cart[0].total += quantity;
 }
+
+export function removeFromCart(productId) {
+  for (let index = 1; index < cart.length; index++) {
+    if (productId == cart[index].id) {
+      cart.splice(index, 1);
+      break;
+    }
+  }
+}
