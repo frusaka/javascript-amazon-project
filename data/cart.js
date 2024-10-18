@@ -32,6 +32,6 @@ export function calculateCartQuantity() {
   return total;
 }
 
-function saveCart() {
+export function saveCart() {
   localStorage.setItem("amazon-cart", JSON.stringify(cart));
 }
