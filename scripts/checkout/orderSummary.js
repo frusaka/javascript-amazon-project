@@ -1,14 +1,9 @@
-import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js";
-import {
-  cart,
-  saveCart,
-  removeFromCart,
-  calculateCartQuantity,
-} from "../../data/cart.js";
+import { cart, saveCart, removeFromCart } from "../../data/cart.js";
 import { products } from "../../data/products.js";
 import formatCurrency from "../utils/money.js";
-import deliveryOptions from "../../data/deliveryOptions.js";
+import { deliveryOptions, deliveryDate } from "../../data/deliveryOptions.js";
 import renderPaymentSummary from "./paymentSummary.js";
+import renderCheckoutHeader from "./checkoutHeader.js";
 
 export default function renderOrderSummary() {
   let cartSummaryHTML = "";
@@ -24,7 +19,7 @@ export default function renderOrderSummary() {
     cartSummaryHTML += `
       <div class="cart-item-container" data-product-id="${matchingProduct.id}">
         <div class="delivery-date js-delivery-date">
-          ${deliverDay(cartItem.deliveryOptionId)}
+          ${deliveryDate(cartItem.deliveryOptionId)}
         </div>
         <div class="cart-item-details-grid">
           <img class="product-image" src="${matchingProduct.image}">
@@ -34,8 +29,6 @@ export default function renderOrderSummary() {
       </div>
     `;
   });
-
-  updateCartQuantity();
 
   document.querySelector(".js-order-summary").innerHTML = cartSummaryHTML;
 
@@ -49,9 +42,9 @@ export default function renderOrderSummary() {
     deleteLinks.forEach((deleteLink) => {
       deleteLink.addEventListener("click", () => {
         removeFromCart(productId);
-        updateCartQuantity();
-        container.remove();
+        renderCheckoutHeader();
         renderPaymentSummary();
+        container.remove();
       });
     });
 
@@ -86,12 +79,6 @@ export default function renderOrderSummary() {
       if (event.key == "Enter") showUpdateQuantityMode(container);
     });
   });
-}
-
-function updateCartQuantity() {
-  document.querySelector(
-    ".js-checkout-items"
-  ).innerHTML = `${calculateCartQuantity()} items`;
 }
 
 function cartItemDetailsHTML(cartProduct, quantity) {
@@ -135,7 +122,7 @@ function deliveryOptionsHTML(cartItem) {
           >
         <div>
           <div class="delivery-option-date">
-            ${deliverDay(option.deliveryDays)}
+            ${deliveryDate(option.deliveryDays)}
           </div>
           <div class="delivery-option-price">
             ${
@@ -171,21 +158,9 @@ function showUpdateQuantityMode(cartItemContainer) {
       break;
     }
   }
-  cartItemContainer.querySelector(".quantity-label").innerHTML = newQuantity;
   cartItemContainer.classList.remove("is-editing-quantity");
-  updateCartQuantity();
+  renderCheckoutHeader();
+  renderOrderSummary();
+  renderPaymentSummary();
   saveCart();
-}
-
-function deliverDay(offset) {
-  const now = dayjs();
-  if (!(typeof offset == "number")) {
-    for (const option of deliveryOptions) {
-      if (option.id == offset) {
-        offset = option.deliveryDays;
-        break;
-      }
-    }
-  }
-  return now.add(offset, "days").format("dddd, MMMM D");
 }

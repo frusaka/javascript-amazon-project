@@ -1,5 +1,5 @@
 import { cart, calculateCartQuantity } from "../../data/cart.js";
-import deliveryOptions from "../../data/deliveryOptions.js";
+import {deliveryOptions} from "../../data/deliveryOptions.js";
 import { getProduct } from "../../data/products.js";
 import formatCurrency from "../utils/money.js";
 

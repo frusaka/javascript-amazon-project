@@ -1,4 +1,5 @@
-const deliveryOptions = [
+import dayjs from "https://unpkg.com/dayjs@1.11.10/esm/index.js";
+export const deliveryOptions = [
   {
     id: "1",
     deliveryDays: 7,
@@ -12,4 +13,23 @@ const deliveryOptions = [
   },
 ];
 
-export default deliveryOptions;
+export function deliveryDate(offset) {
+  const now = dayjs();
+  if (!(typeof offset == "number")) {
+    for (const option of deliveryOptions) {
+      if (option.id == offset) {
+        offset = option.deliveryDays;
+        break;
+      }
+    }
+  }
+  let daysLeft = offset;
+  offset = 0;
+  while (daysLeft) {
+    offset++;
+    if (now.add(offset).day() < 6) {
+      daysLeft--;
+    }
+  }
+  return now.add(offset, "days").format("dddd, MMMM D");
+}
