@@ -8,6 +8,7 @@ import {
 import { products } from "../../data/products.js";
 import formatCurrency from "../utils/money.js";
 import deliveryOptions from "../../data/deliveryOptions.js";
+import renderPaymentSummary from "./paymentSummary.js";
 
 export default function renderOrderSummary() {
   let cartSummaryHTML = "";
@@ -50,6 +51,7 @@ export default function renderOrderSummary() {
         removeFromCart(productId);
         updateCartQuantity();
         container.remove();
+        renderPaymentSummary();
       });
     });
 
@@ -73,6 +75,7 @@ export default function renderOrderSummary() {
             cartItem.deliveryOptionId = deliveryCheck.dataset.deliveryOptionId;
             saveCart();
             renderOrderSummary();
+            renderPaymentSummary();
             return;
           }
         }
