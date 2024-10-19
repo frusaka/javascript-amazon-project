@@ -27,9 +27,8 @@ export function deliveryDate(offset) {
   offset = 0;
   while (daysLeft) {
     offset++;
-    if (now.add(offset).day() < 6) {
-      daysLeft--;
-    }
+    const tomorrow = now.add(offset, "days").day();
+    if (tomorrow && tomorrow < 6) daysLeft--;
   }
   return now.add(offset, "days").format("dddd, MMMM D");
 }
