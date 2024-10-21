@@ -1,9 +1,13 @@
-export const cart = JSON.parse(localStorage.getItem("amazon-cart")) || [];
+export let cart;
 
-export function addToCart(productId) {
+loadCart();
+
+export function loadCart() {
+  cart = JSON.parse(localStorage.getItem("amazon-cart")) || [];
+}
+
+export function addToCart(productId, quantity) {
   let productInCart;
-  const quantity = +document.querySelector(`.js-quantity-selector-${productId}`)
-    .value;
   cart.forEach((cartItem) => {
     if (cartItem.productId == productId) {
       productInCart = true;

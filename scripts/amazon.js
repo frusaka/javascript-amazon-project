@@ -81,8 +81,11 @@ document.querySelector(".js-proudcts-grid").innerHTML = productsHTML;
 document.querySelectorAll(".js-add-to-cart-button").forEach((jsButton) => {
   let previousTimeOut = { value: null };
   const productId = jsButton.dataset.productId;
+  const quantity = +document.querySelector(`.js-quantity-selector-${productId}`)
+    .value;
+
   jsButton.addEventListener("click", () => {
-    addToCart(productId);
+    addToCart(productId, quantity);
     showAddedLabel(productId, previousTimeOut);
     updateCartQuantity();
   });
