@@ -475,6 +475,12 @@ export const products = [
 
 export let products;
 
+export function loadProductsFetch() {
+  return fetch("https://supersimplebackend.dev/products")
+    .then((response) => response.json())
+    .then((productsData) => (products = productsData));
+}
+
 export function loadProducts(callback) {
   const xhr = new XMLHttpRequest();
   xhr.addEventListener("load", () => {
@@ -491,3 +497,5 @@ export function getProduct(productId) {
     if (product.id == productId) return product;
   }
 }
+
+loadProductsFetch();

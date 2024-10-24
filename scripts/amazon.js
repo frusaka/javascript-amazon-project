@@ -1,9 +1,9 @@
 import { calculateCartQuantity, addToCart, loadCart } from "../data/cart.js";
-import { loadProducts, products } from "../data/products.js";
+import { loadProductsFetch, products } from "../data/products.js";
 import { formatCurrency } from "./utils/money.js";
 
 Promise.all([
-  new Promise((resolve) => loadProducts(resolve)),
+  loadProductsFetch(),
   new Promise((resolve) => loadCart(resolve)),
 ]).then(() => {
   let productsHTML = "";
