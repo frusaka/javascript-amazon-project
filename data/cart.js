@@ -1,9 +1,14 @@
 export let cart;
 
-loadCart();
-
-export function loadCart() {
-  cart = JSON.parse(localStorage.getItem("amazon-cart")) || [];
+export function loadCart(callback) {
+  const xhr = new XMLHttpRequest();
+  xhr.addEventListener("load", () => {
+    console.log(xhr.response);
+    cart = JSON.parse(localStorage.getItem("amazon-cart")) || [];
+    callback();
+  });
+  xhr.open("GET", "https://supersimplebackend.dev/cart/");
+  xhr.send();
 }
 
 export function addToCart(productId, quantity) {
