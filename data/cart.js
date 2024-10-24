@@ -1,10 +1,10 @@
 export let cart;
 
-export function loadCart(callback) {
+export async function loadCart(callback) {
+  cart = JSON.parse(localStorage.getItem("amazon-cart")) || [];
   const xhr = new XMLHttpRequest();
   xhr.addEventListener("load", () => {
     console.log(xhr.response);
-    cart = JSON.parse(localStorage.getItem("amazon-cart")) || [];
     callback();
   });
   xhr.open("GET", "https://supersimplebackend.dev/cart/");

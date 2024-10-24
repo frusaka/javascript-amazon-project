@@ -2,10 +2,10 @@ import { calculateCartQuantity, addToCart, loadCart } from "../data/cart.js";
 import { loadProductsFetch, products } from "../data/products.js";
 import { formatCurrency } from "./utils/money.js";
 
-Promise.all([
-  loadProductsFetch(),
-  new Promise((resolve) => loadCart(resolve)),
-]).then(() => {
+loadPage();
+
+async function loadPage() {
+  await Promise.all([loadProductsFetch(), loadCart()]);
   let productsHTML = "";
   products.forEach((product) => {
     productsHTML += `
@@ -76,7 +76,7 @@ Promise.all([
       updateCartQuantity();
     });
   });
-});
+}
 
 function showAddedLabel(productId, previousTimeOut) {
   const inCartElement = document.querySelector(
