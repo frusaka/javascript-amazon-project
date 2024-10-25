@@ -33,7 +33,13 @@ export function deliveryDate(offset) {
   return formatDate(now.add(offset, "days"));
 }
 
-export function formatDate(date,includeDay=true) {
-  date = dayjs(date);
-  return date.format(`${includeDay ? "dddd,":""} MMMM D`);
+export function formatDate(date, includeDay = true) {
+  return dayjs(date).format(`${includeDay ? "dddd," : ""} MMMM D`);
+}
+
+export function deliveryDurationFactor(orderTime, deliveryTIme) {
+  orderTime = dayjs(orderTime);
+  deliveryTIme = dayjs(deliveryTIme);
+  // dayjs.diff(deliveryTIme,"days") / deliveryDate
+  return  dayjs().diff(orderTime, "days") / deliveryTIme.diff(orderTime, "days");
 }
