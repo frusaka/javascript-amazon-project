@@ -66,11 +66,10 @@ async function loadPage() {
   document.querySelectorAll(".js-add-to-cart-button").forEach((jsButton) => {
     let previousTimeOut = { value: null };
     const productId = jsButton.dataset.productId;
-    const quantity = +document.querySelector(
-      `.js-quantity-selector-${productId}`
-    ).value;
-
     jsButton.addEventListener("click", () => {
+      const quantity = +document.querySelector(
+        `.js-quantity-selector-${productId}`
+      ).value;
       addToCart(productId, quantity);
       showAddedLabel(productId, previousTimeOut);
       updateCartQuantity();
