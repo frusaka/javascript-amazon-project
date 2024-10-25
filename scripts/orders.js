@@ -1,4 +1,4 @@
-import { calculateCartQuantity } from "../data/cart.js";
+import { addToCart, calculateCartQuantity } from "../data/cart.js";
 import { formatDate } from "../data/deliveryOptions.js";
 import { orders } from "../data/ordersProducts.js";
 import { getProduct } from "../data/products.js";
@@ -21,15 +21,20 @@ async function renderOrders() {
           <div class="product-delivery-date">
             Arriving on: ${formatDate(Orderproduct.estimatedDeliveryTime, 0)}
           </div>
-          <div class="product-quantity"> Quantity: ${Orderproduct.quantity} </div>
-          <button class="buy-again-button button-primary">
+          <div class="product-quantity"> Quantity: ${
+            Orderproduct.quantity
+          } </div>
+          <button class="buy-again-button button-primary js-buy-again"
+            data-product-id="${matchingProduct.id}">
             <img class="buy-again-icon" src="images/icons/buy-again.png">
             <span class="buy-again-message">Buy it again</span>
           </button>
         </div>
 
         <div class="product-actions">
-          <a href="tracking.html?orderId=${order.id}&productId=${Orderproduct.productId}">
+          <a href="tracking.html?orderId=${order.id}&productId=${
+        Orderproduct.productId
+      }">
             <button class="track-package-button button-secondary">
               Track package
             </button>
@@ -61,6 +66,12 @@ async function renderOrders() {
     `;
   });
   document.querySelector(".js-orders").innerHTML = ordersHTML;
+  document.querySelectorAll(".js-buy-again").forEach((jsButton) => {
+    jsButton.addEventListener("click", () => {
+      addToCart(jsButton.dataset.productId, 1);
+      location.href = "checkout.html";
+    });
+  });
 }
 renderOrders();
 document.querySelector(".js-cart-quantity").innerHTML = calculateCartQuantity();
