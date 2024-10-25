@@ -1,11 +1,12 @@
-import { calculateCartQuantity, addToCart, loadCart } from "../data/cart.js";
-import { loadProductsFetch, products } from "../data/products.js";
+import { calculateCartQuantity, addToCart } from "../data/cart.js";
+import { products } from "../data/products.js";
+import loadData from "./utils/data.js";
 import { formatCurrency } from "./utils/money.js";
 
 loadPage();
 
 async function loadPage() {
-  await Promise.all([loadProductsFetch(), loadCart()]);
+  await loadData();
   let productsHTML = "";
   products.forEach((product) => {
     productsHTML += `

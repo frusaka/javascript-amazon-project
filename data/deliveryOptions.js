@@ -30,5 +30,10 @@ export function deliveryDate(offset) {
     const tomorrow = now.add(offset, "days").day();
     if (tomorrow && tomorrow < 6) daysLeft--;
   }
-  return now.add(offset, "days").format("dddd, MMMM D");
+  return formatDate(now.add(offset, "days"));
+}
+
+export function formatDate(date,includeDay=true) {
+  date = dayjs(date);
+  return date.format(`${includeDay ? "dddd,":""} MMMM D`);
 }

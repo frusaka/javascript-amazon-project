@@ -1,15 +1,16 @@
-import { calculateCartQuantity, loadCart } from "../data/cart.js";
+import { calculateCartQuantity } from "../data/cart.js";
+import { formatDate } from "../data/deliveryOptions.js";
 import { orders } from "../data/ordersProducts.js";
-import { getProduct, loadProductsFetch } from "../data/products.js";
+import { getProduct } from "../data/products.js";
+import loadData from "./utils/data.js";
 import formatCurrency from "./utils/money.js";
 
 async function renderOrders() {
-  await Promise.all([loadProductsFetch(), loadCart()]);
+  await loadData();
   let ordersHTML = "";
   orders.forEach((order) => {
     let orderDetailsHTML = "";
     order.products.forEach((Orderproduct) => {
-      console.log(Orderproduct);
       const matchingProduct = getProduct(Orderproduct.productId);
       orderDetailsHTML += `
         <div class="product-image-container">
@@ -18,7 +19,7 @@ async function renderOrders() {
         <div class="product-details">
           <div class="product-name"> ${matchingProduct.name}</div>
           <div class="product-delivery-date">
-            Arriving on: August 15
+            Arriving on: ${formatDate(Orderproduct.estimatedDeliveryTime, 0)}
           </div>
           <div class="product-quantity"> Quantity: ${Orderproduct.quantity} </div>
           <button class="buy-again-button button-primary">
@@ -28,7 +29,7 @@ async function renderOrders() {
         </div>
 
         <div class="product-actions">
-          <a href="tracking.html">
+          <a href="tracking.html?orderId=${order.id}&productId=${Orderproduct.productId}">
             <button class="track-package-button button-secondary">
               Track package
             </button>
@@ -42,7 +43,7 @@ async function renderOrders() {
           <div class="order-header-left-section">
             <div class="order-date">
               <div class="order-header-label">Order Placed:</div>
-              <div>August 12</div>
+              <div>${formatDate(order.orderTime, false)}</div>
             </div>
             <div class="order-total">
               <div class="order-header-label">Total:</div>
@@ -63,4 +64,3 @@ async function renderOrders() {
 }
 renderOrders();
 document.querySelector(".js-cart-quantity").innerHTML = calculateCartQuantity();
-
