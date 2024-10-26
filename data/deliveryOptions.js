@@ -37,9 +37,8 @@ export function formatDate(date, includeDay = true) {
   return dayjs(date).format(`${includeDay ? "dddd," : ""} MMMM D`);
 }
 
-export function deliveryDurationFactor(orderTime, deliveryTIme) {
+export function deliveryDurationFactor(orderTime, deliveryTime) {
   orderTime = dayjs(orderTime);
-  deliveryTIme = dayjs(deliveryTIme);
-  // dayjs.diff(deliveryTIme,"days") / deliveryDate
-  return  dayjs().diff(orderTime, "days") / deliveryTIme.diff(orderTime, "days");
+  deliveryTime = dayjs(deliveryTime);
+  return dayjs().diff(orderTime) / deliveryTime.diff(orderTime);
 }

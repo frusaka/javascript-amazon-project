@@ -12,10 +12,11 @@ async function trackOrder() {
   const order = getOrder(orderId);
   const matchingProduct = getProduct(productId);
   const orderProduct = getOrderProduct(orderId, productId);
-  const timeFactor = Math.max(
-    0.1,
-    deliveryDurationFactor(order.orderTime, orderProduct.estimatedDeliveryTime)
+  const timeFactor = deliveryDurationFactor(
+    order.orderTime,
+    orderProduct.estimatedDeliveryTime
   );
+
   document.querySelector(".js-order-tracking").innerHTML = `
     <div class="order-tracking js-order-tracking">
       <a class="back-to-orders-link link-primary" href="orders.html">
