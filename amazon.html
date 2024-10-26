@@ -20,6 +20,8 @@
     <link rel="stylesheet" href="styles/shared/general.css" />
     <link rel="stylesheet" href="styles/shared/amazon-header.css" />
     <link rel="stylesheet" href="styles/pages/amazon.css" />
+
+    <script type="module" src="scripts/amazon.js"></script>
   </head>
   <body>
     <div class="amazon-header">
@@ -34,9 +36,13 @@
       </div>
 
       <div class="amazon-header-middle-section">
-        <input class="search-bar" type="text" placeholder="Search" />
+        <input
+          class="search-bar js-search-bar"
+          type="text"
+          placeholder="Search"
+        />
 
-        <button class="search-button">
+        <button class="search-button js-search">
           <img class="search-icon" src="images/icons/search-icon.png" />
         </button>
       </div>
@@ -58,6 +64,5 @@
     <div class="main">
       <div class="products-grid js-proudcts-grid"></div>
     </div>
-    <script type="module" src="scripts/amazon.js"></script>
   </body>
 </html>

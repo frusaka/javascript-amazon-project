@@ -2,6 +2,7 @@ import { addToCart, calculateCartQuantity } from "../data/cart.js";
 import { formatDate } from "../data/deliveryOptions.js";
 import { orders } from "../data/ordersProducts.js";
 import { getProduct } from "../data/products.js";
+import { addSearchEvents } from "./utils/search.js";
 import loadData from "./utils/data.js";
 import formatCurrency from "./utils/money.js";
 
@@ -75,3 +76,4 @@ async function renderOrders() {
 }
 renderOrders();
 document.querySelector(".js-cart-quantity").innerHTML = calculateCartQuantity();
+addSearchEvents();

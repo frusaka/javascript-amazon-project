@@ -1,6 +1,7 @@
 import { deliveryDurationFactor, formatDate } from "../data/deliveryOptions.js";
 import { getOrder, getOrderProduct } from "../data/ordersProducts.js";
 import { getProduct } from "../data/products.js";
+import { addSearchEvents } from "./utils/search.js";
 import loadData from "./utils/data.js";
 
 async function trackOrder() {
@@ -11,10 +12,10 @@ async function trackOrder() {
   const order = getOrder(orderId);
   const matchingProduct = getProduct(productId);
   const orderProduct = getOrderProduct(orderId, productId);
-  const timeFactor = Math.max(0.1, deliveryDurationFactor(
-    order.orderTime,
-    orderProduct.estimatedDeliveryTime
-  ));
+  const timeFactor = Math.max(
+    0.1,
+    deliveryDurationFactor(order.orderTime, orderProduct.estimatedDeliveryTime)
+  );
   document.querySelector(".js-order-tracking").innerHTML = `
     <div class="order-tracking js-order-tracking">
       <a class="back-to-orders-link link-primary" href="orders.html">
@@ -33,16 +34,22 @@ async function trackOrder() {
         Quantity: ${orderProduct.quantity}
       </div>
 
-      <img class="product-image js-product-image" src="${matchingProduct.image}">
+      <img class="product-image js-product-image" src="${
+        matchingProduct.image
+      }">
 
       <div class="progress-labels-container">
         <div class="progress-label ${timeFactor < 0.5 ? "current-status" : ""}">
           Preparing
         </div>
-        <div class="progress-label ${timeFactor<1 && timeFactor > 0.5 ? "current-status" : ""}"">
+        <div class="progress-label ${
+          timeFactor < 1 && timeFactor > 0.5 ? "current-status" : ""
+        }"">
           Shipped
         </div>
-        <div class="progress-label ${timeFactor === 1 ? "current-status" : ""}"">
+        <div class="progress-label ${
+          timeFactor === 1 ? "current-status" : ""
+        }"">
           Delivered
         </div>
       </div>
@@ -55,3 +62,4 @@ async function trackOrder() {
 }
 
 trackOrder();
+addSearchEvents();

@@ -1,7 +1,8 @@
 import { calculateCartQuantity, addToCart } from "../data/cart.js";
-import { products } from "../data/products.js";
-import loadData from "./utils/data.js";
+import { getProduct, products } from "../data/products.js";
 import { formatCurrency } from "./utils/money.js";
+import { hasSearchQuery, addSearchEvents } from "./utils/search.js";
+import loadData from "./utils/data.js";
 
 loadPage();
 
@@ -10,7 +11,8 @@ async function loadPage() {
   let productsHTML = "";
   products.forEach((product) => {
     productsHTML += `
-      <div class="product-container">
+      <div class="product-container js-product-container"
+        data-product-id="${product.id}">
         <div class="product-image-container">
           <img class="product-image"
             src="${product.image}">
@@ -76,6 +78,9 @@ async function loadPage() {
       updateCartQuantity();
     });
   });
+
+  addSearchEvents();
+  filterProducts();
 }
 
 function showAddedLabel(productId, previousTimeOut) {
@@ -93,4 +98,28 @@ function showAddedLabel(productId, previousTimeOut) {
 function updateCartQuantity() {
   document.querySelector(".js-cart-quantity").innerHTML =
     calculateCartQuantity();
+}
+
+function filterProducts() {
+  const searchQuery = new URL(location.href).searchParams.get("search");
+  if (!searchQuery) {
+    return;
+  }
+  document.querySelector(".js-search-bar").value = searchQuery;
+  document
+    .querySelectorAll(".js-product-container")
+    .forEach((productContainer) => {
+      const product = getProduct(productContainer.dataset.productId);
+      productContainer.style.display = "none";
+      if (hasSearchQuery(product.name, searchQuery, 0.8)) {
+        productContainer.style.display = "initial";
+        return;
+      }
+      for (const keyword of product.keywords) {
+        if (hasSearchQuery(keyword, searchQuery, 0.5)) {
+          productContainer.style.display = "initial";
+          return;
+        }
+      }
+    });
 }
